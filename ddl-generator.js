@@ -282,7 +282,7 @@ class DDLGenerator {
       })
 
 
-       template = Twig.twig({
+       var template = Twig.twig({
         data: 'The {{ baked_good }} is a lie.'
       });
 
