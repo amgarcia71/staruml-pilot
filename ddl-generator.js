@@ -68,7 +68,7 @@ class DDLGenerator {
               var getDirName = require('path').dirname;
               fs.mkdir(getDirName(mPath), { recursive: true}, function (err) {
                 if (err) console.log(err)
-                 else  console.log( "dir created ", getDirName(t))
+                 else  console.log( "dir created ", getDirName(mPath))
        
                })
 
