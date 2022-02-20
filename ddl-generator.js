@@ -43,30 +43,36 @@ class DDLGenerator {
 
     console.log (this.basePath)
     console.log ('generating '+ elem.name )
-    
+
+    var myPath =  path.join( this.basePath , elem.name )
+
     // Get list of temoplates
-      walk(__dirname + '/templates/', function(err, results) {
+      walk(__dirname + '/templates/', function(err, results, myPath ) {
         if (err) throw err;
         console.log('templates', results);
-      },  );
-
-      console.log('templates out', results);
 
 
-        // Templates
-        for (var i = 0; i < results.length; i++) {
-          var t = results[i]
-          console.log(t)
-          var template = Twig.twig({
-            data:  fs.readFileSync( t  ).toString()
-          });
+          // Templates
+          for (var i = 0; i < results.length; i++) {
+              var t = results[i]
+              console.log(t)
+              var template = Twig.twig({
+                data:  fs.readFileSync( t  ).toString()
+              });
 
-          var myPath = path.join( this.basePath , elem.name ,  relativePath(t,'/templates/').split('.')[0] ) 
-          console.log (myPath)
+              var mPath = path.join(  myPath,  relativePath(t,'/templates/').split('.')[0])
+              console.log ('m path' , mPath)
 
-          fs.writeFileSync( myPath,  template.render(elem), { recursive: true })
+              fs.writeFileSync(   mPath   ,  template.render(elem), { recursive: true })
 
-      }
+          }
+
+
+
+      },  myPath );
+
+     
+       
 
   }
  
@@ -120,24 +126,24 @@ function relativePath(myPath , myRelative) {
 
 
 var path = require('path');
-var walk = function(dir, done) {
+var walk = function(dir, done,  myPath) {
   var results = [];
   fs.readdir(dir, function(err, list) {
     if (err) return done(err);
     var i = 0;
     (function next() {
       var file = list[i++];
-      if (!file) return done(null, results);
+      if (!file) return done(null, results,myPath);
       file = path.resolve(dir, file);
       fs.stat(file, function(err, stat) {
         if (stat && stat.isDirectory()) {
-          walk(file, function(err, res) {
+          walk(file, function(err, res ) {
             results = results.concat(res);
             next();
           });
         } else {
           results.push(file);
-          next();
+          next(); 
         }
       });
     })();
