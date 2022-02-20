@@ -284,11 +284,14 @@ class DDLGenerator {
       })
 
      
+      console.log( __dirname + '/templates/template1.twig');
 
        var template = Twig.twig({
         data:  fs2.readFileSync( __dirname + '/templates/template1.twig')
       });
 
+      console.log(data)
+      
       console.log(
         template.render({baked_good: 'cupcake'})
       );
