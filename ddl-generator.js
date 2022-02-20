@@ -41,6 +41,8 @@ class DDLGenerator {
    */
    writeCodeForTable ( elem, options) {
 
+    console.log(elem)
+
     console.log (this.basePath)
     console.log ('generating '+ elem.name )
 

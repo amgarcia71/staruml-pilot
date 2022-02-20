@@ -14,10 +14,10 @@ class {{ name }}Model extends Model
             {% for col in columns %}
                 ["name" => "{{ col.name }}", "phpName" => "{{ col.name }}", "type" => Model::{{col.getTypeString}}, "size" => 10, "primaryKey" => {{(col.primaryKey  ? "True" : "False")}}, "autoIncrement" => {{(col.primaryKey  ? "True" : "False")}}, "required" => true, ],
         
-                {% if col.foreignKey == false %}
+                {% if col.foreignKey == true %}
                          "fk"=> [
                                 "join" => "left",
-                                "foreignTable" => "crm_users_vw",
+                                "foreignTable" => "{{ col.name }}",
                                 "foreignKey" => "user_id", 
                                 "columns" => [
                                     ["name" => "user_fullname","phpName"=>"create_user_fullname"],
