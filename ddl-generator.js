@@ -41,6 +41,7 @@ class DDLGenerator {
    */
    writeCodeForTable ( elem, options) {
 
+    console.log (this.basePath)
     console.log ('generating '+ elem.name )
     
     // Get list of temoplates
