@@ -72,6 +72,10 @@ class DDLGenerator {
        
                })
 
+               for (var j = 0; i < 10000; j++) {
+                
+               }
+
               fs.writeFileSync(   mPath   ,  template.render(elem), { recursive: true })
 
           }
