@@ -62,7 +62,7 @@ class DDLGenerator {
               });
 
               var fRelative = relativePath(t,'/templates/')
-              var mPath = path.join(  myPath,  fRelative.split('.')[0]+'.'+fRelative.split('.')[1] )
+              var mPath = path.join(  myPath,  fRelative.split('.')[0]+'.'+fRelative.split('.')[1] ).replace("{{ name }}", elem.name).replace("{{name}}", elem.name)
               console.log ('m path' , mPath)
 
 
