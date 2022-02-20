@@ -304,7 +304,7 @@ class DDLGenerator {
         codeWriter.writeLine( template.render({baked_good: 'cupcake'}))
 
 
-        codeWriter.writeLine(JSON.safeStringify(e, null, 2))
+        codeWriter.writeLine(JSON.safeStringify(elem, null, 2))
 
            // Others (Nothing generated.)
         fs.writeFileSync(basePath, codeWriter.getData())
