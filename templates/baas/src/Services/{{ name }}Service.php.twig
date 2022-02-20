@@ -171,10 +171,10 @@ class {{ name }}Service extends \Pilot\MicroservicesLibs\Abstracts\AbstractClass
      * @param type $dsn
      * @return \App\Models\MySqlModel
      */
-    private function _modelInstance(string $dsn): \App\Models\{{ name }Model
+    private function _modelInstance(string $dsn): \App\Models\{{ name }}Model
     {
         $ConnectionManager = $this->getContainer()->sql->open($dsn);
-        $model = new \App\Models\{{ name }}Model($ConnectionManager);
+        $model = new \App\Models\{{ name }}}Model($ConnectionManager);
         // solo en el caso que la entidad maneje una capa de persistencia de cache 
         $model->setCacheManager($this->_cacheInstance());
         return $model;
