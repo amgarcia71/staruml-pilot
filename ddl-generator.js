@@ -127,7 +127,7 @@ var walk = function(dir, done) {
       var file = list[i++];
       if (!file) return done(null, results);
       file = path.resolve(dir, file);
-      fs2.stat(file, function(err, stat) {
+      fs.stat(file, function(err, stat) {
         if (stat && stat.isDirectory()) {
           walk(file, function(err, res) {
             results = results.concat(res);
