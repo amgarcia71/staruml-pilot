@@ -1,0 +1,54 @@
+<?php
+
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
+
+// DEFINIMOS PATH DE LA RAIZ DEL MICROSERVICE
+define('APP_PATH', dirname(__FILE__).'/../');
+
+/**
+ * This way all Warnings and Notices will be treated as Errors and as such will trigger the defined handlers.
+ */
+error_reporting(E_ALL);
+set_error_handler(function ($severity, $message, $file, $line) {
+    if (error_reporting() & $severity) {
+        throw new \ErrorException($message, 0, $severity, $file, $line);
+    }
+});
+
+// AUTOLOADERS 
+require APP_PATH . 'vendor/autoload.php';
+
+if (PHP_SAPI == 'cli-server') {
+    // To help the built-in PHP dev server, check if the request was actually for
+    // something which should probably be served as a static file
+    $url  = parse_url($_SERVER['REQUEST_URI']);
+    $file = __DIR__ . $url['path'];
+    if (is_file($file)) {
+        return false;
+    }
+}
+
+// Agarramos los settings del slim
+// puede acceder con $GLOBALS['SETTINGS_OF_THE_SLIM_PROJECT'] en cualquier lugar
+$SETTINGS_OF_THE_SLIM_PROJECT = require APP_PATH . 'src/settings.php';
+
+
+// Instantiate the app con settings plantillado por entorno
+$app = new \Slim\App( $SETTINGS_OF_THE_SLIM_PROJECT );
+
+// Set up dependencies
+require APP_PATH . 'src/dependencies.php';
+
+// Register middleware
+require APP_PATH . 'src/middleware.php';
+
+// Register routes
+require APP_PATH . 'src/routes.php';
+
+// register Fatal Errors Handler
+\Pilot\MicroservicesLibs\Handlers\Error::register($app->getContainer());
+
+
+// Run app
+$app->run();

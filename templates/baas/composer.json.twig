@@ -1,0 +1,47 @@
+{
+    "name": "pilot/template-baas-{{ name }}-microservice",
+    "description": "Esqueleto para soporte de construccion de microservicios",
+    "keywords": ["Pilot", "crm", "microframework", "rest", "router", "psr7"],
+    "homepage": "https://www.pilotsolution.net/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pilot Solution CRM"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:pilotcrmwebdev/microservice-libs.git"
+        },
+        {
+            "type": "git",
+            "url": "git@bitbucket.org:pilotcrmwebdev/cache-manager.git"
+        }   
+    ],
+    "config": {
+        "platform": {
+            "php": "7.0"
+        }
+    },
+    "require": {
+        "php": ">=7.0.0",
+        "slim/slim": "^3.1",
+        "webmozart/assert": "^1.9",
+        "pilot/microserviceslibs": "2.3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\" : "src/"
+        }
+    },
+	"scripts": {
+        "server": "composer test && composer start"
+	}
+
+}

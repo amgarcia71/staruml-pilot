@@ -1,0 +1,232 @@
+{
+	"info": {
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
+				},
+                "url": {
+                    "raw": "{*{url}*}/{*{dsn}*}/acm-awr-{{ name }}",
+					"host": [
+						"{*{url}*}"
+					],
+					"path": [
+						"{*{dsn}*}",
+						"acm-awr-{{ name }}"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+                    "raw": "{*{url}*}/{*{dsn}*}/acm-awr-{{ name }}/1",
+					"host": [
+						"{*{url}*}"
+					],
+					"path": [
+						"{*{dsn}*}",
+						"acm-awr-{{ name }}",
+                        1
+					]
+				},
+				"description": ""
+			},
+			"response": [
+			]
+		},
+		{
+			"name": "Read",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+                    "raw": "{*{url}*}/{*{dsn}*}/acm-awr-{{ name }}/1",
+					"host": [
+						"{*{url}*}"
+					],
+					"path": [
+						"{*{dsn}*}",
+						"acm-awr-{{ name }}",
+                        1
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": "{\n    \"page\":1,\n    \"rows_per_page\":25\n}",
+					}
+				},
+				"url": {
+                    "raw": "{*{url}*}/{*{dsn}*}/acm-awr-{{ name }}",
+					"host": [
+						"{*{url}*}"
+					],
+					"path": [
+						"{*{dsn}*}",
+						"acm-awr-{{ name }}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+                    "raw": "{*{url}*}/{*{dsn}*}/acm-awr-{{ name }}/1",
+					"host": [
+						"{*{url}*}"
+					],
+					"path": [
+						"{*{dsn}*}",
+						"acm-awr-{{ name }}",
+                        1
+					]
+				},
+				"description": ""
+			},
+			"response": [
+			]
+		},
+		{
+			"name": "Delete Cache ALL",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{*{url}*}/cache",
+					"host": [
+						"{*{url}*}"
+					],
+					"path": [
+						"cache"
+					]
+				},
+				"description": ""
+			},
+			"response": [
+			]
+		},
+		{
+			"name": "Delete Cache by DSN",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{*{url}*}/cache/{*{dsn}*}",
+					"host": [
+						"{*{url}*}"
+					],
+					"path": [
+						"cache",
+						"{*{dsn}*}"
+					]
+				},
+				"description": ""
+			},
+			"response": [
+			]
+		}
+	],
+	"protocolProfileBehavior": {}
+}

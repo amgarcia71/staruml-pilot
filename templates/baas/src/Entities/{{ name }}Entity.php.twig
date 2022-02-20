@@ -1,0 +1,26 @@
+<?php
+namespace App\Entities;
+
+/* Archivo generado automaticamente por Pilot-cli */ 
+
+use Pilot\MicroservicesLibs\Rdbms\Entity;
+use Webmozart\Assert\Assert;
+
+class {{ name }}Entity extends Entity
+{    
+    
+    /**
+     * Verificacion de reglas de negocio de la entidad 
+     * ref https://github.com/webmozart/assert
+     * @return bool
+     */
+    public function isValid():bool {
+        // aqui verificar que la entidad este correctamente establecida
+        // Assert::length('123456789', 10, "must_be_10_caracters_length"); // return Exception
+        // Assert::notContains("acbz", "z", "must_contain_z"); // assert true
+
+        // tambien se ponen las reglas de negocio que luego se verificaran antes de grabar la entidad 
+
+        return true; 
+    }
+}

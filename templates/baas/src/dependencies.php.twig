@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * CONTENEDOR DE LAS DEPENDENCIAS 
+ */
+$container = $app->getContainer();
+
+
+/**
+ * Var environment Helper para obtener variables de ambiente
+ * NOTE! not use \environment\ in the name, because re-write slim dependecies
+ */
+$container['var_env'] = function (\Slim\Container $c) {
+    return Pilot\MicroservicesLibs\Factories\VarEnvironment::create($c);
+};
+
+
+/**
+ * Standard OutPut para los response
+ * @return Pilot\MicroservicesLibs\StandardOutput
+ */
+$container['standard_output'] = function (\Slim\Container $c) {
+    return new Pilot\MicroservicesLibs\StandardOutput($c);
+};
+
+
+/**
+ * reWrite slim error handler 
+ */
+$container['errorHandler'] = function (\Slim\Container $c) {
+    return new Pilot\MicroservicesLibs\Handlers\Error($c);
+};
+
+/**
+ * reWrite PHP error handler 
+ */
+$container['phpErrorHandler'] = function (\Slim\Container $c) {
+    return $c->get('errorHandler');
+};
+
+/**
+ * Registro de log
+ */
+$container['logger'] = function (\Slim\Container $c) {
+    
+    $var_env = $c->get('var_env');
+    $app_settings = $c->get("settings");
+    
+    //*******************************************************************************
+    // las variables de entorno se deben configurar con el nombre del microservicio
+    //*******************************************************************************
+    $config = [
+        'log_storage_type' => $var_env->get('BAAS_LOOKUP_{{ name.toUpperCase() }}_LOG_STORAGE_TYPE'), 
+        'log_storage' => $var_env->get('BAAS_LOOKUP_{{ name.toUpperCase() }}_LOG_STORAGE'),
+    ];
+    
+    
+    $logHandler = new \Pilot\MicroservicesLibs\Handlers\Logger($c);
+    
+    $logHandler->init($app_settings["app_name"], $config);
+
+    return $logHandler;
+    
+};
+
+$container['sql'] = function (\Slim\Container $c) {
+    return new \Pilot\MicroservicesLibs\Sql($c);
+};
+
+$container['connection_string'] = function (\Slim\Container $c) {
+    return new Pilot\MicroservicesLibs\ConnectionString($c);
+};
+
+$container['request_parameters'] = function (\Slim\Container $c) {
+    return new Pilot\MicroservicesLibs\RequestParameters($c);
+};
+
+$container['cache'] = function (\Slim\Container $c) {
+    return Pilot\MicroservicesLibs\Factories\Cache::BaasCache();
+};

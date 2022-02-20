@@ -1,0 +1,18 @@
+<?php
+
+## BEGIN Routes for banks
+
+$app->group('/{dsn}/{{ name }}', function (Slim\App $app) {
+    $app->get('', '\App\Controllers\{{ name }}Controller:find' ); // Traer todos los bancos
+    $app->post('/search', '\App\Controllers\{{ name }}Controller:search' ); // BUscar bancos por filtro
+    $app->get('/{id:[0-9]+}', '\App\Controllers\{{ name }}Controller:read' ); // Traer banco por ID
+    $app->post('', '\App\Controllers\{{ name }}Controller:create' );
+    $app->put('/{id:[0-9]+}', '\App\Controllers\{{ name }}Controller:update' );
+    $app->delete('/{id:[0-9]+}', '\App\Controllers\{{ name }}Controller:delete' );
+});
+
+$app->delete( '/cache', '\App\Controllers\{{ name }}Controller:cacheDeleteAll' );
+$app->delete( '/cache/{dsn}', '\App\Controllers\{{ name }}Controller:cacheDeleteByDsn' );
+
+## END Routes for {{ name }}
+

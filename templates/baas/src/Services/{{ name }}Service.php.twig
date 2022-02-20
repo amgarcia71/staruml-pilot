@@ -1,0 +1,207 @@
+<?php
+namespace App\Services;
+
+/* Archivo generado automaticamente por Pilot ArtifactBuilder */ 
+
+use Pilot\MicroservicesLibs\RequestParameters;
+
+class {{ name }}Service extends \Pilot\MicroservicesLibs\Abstracts\AbstractClass
+{
+    CONST CONST_MAX_CACHE_DAYS = 60*60*24*7; //7 diasde cache
+    
+    CONST PARAM_ID = "id";
+    CONST PARAM_CODE = "code";
+    CONST PARAM_NAME = "name";
+    CONST PARAM_DELETED = "deleted";
+    CONST PARAM_VISIBLE = "visible";
+    CONST PARAM_CREATE_USER_ID = "create_user_id";
+    CONST PARAM_UPDATE_USER_ID = "update_user_id";
+    CONST PARAM_DELETE_USER_ID = "delete_user_id";
+    CONST PARAM_CREATE_DT = "create_dt";
+    CONST PARAM_UPDATE_DT = "update_dt";
+    CONST PARAM_DELETE_DT = "delete_dt";
+    CONST PARAM_AUDIT_DT = "audit_dt";
+    CONST PARAM_AUDIT_USER_ID = "audit_user_id";
+     
+        
+    /**
+     * Read entity 
+     * @param type $request
+     * @return \Slim\Http\Response
+     */
+    public function read(RequestParameters $rp)
+    {   
+        $dsn    = $rp->getParameter('dsn');
+        $id     = $rp->getParameter('id');
+        return $this->_read($dsn, $id);     
+    }   
+    
+    /**
+     * Crear Entidad
+     * @param type $request
+     * @param type $response
+     * @param type $args
+     * @return \Slim\Http\Response
+     */
+    public function create(RequestParameters $rp)
+    {   
+        $dsn        = $rp->getParameter('dsn');
+        $model      = $this->_modelInstance($dsn);
+        
+        $entity     = $model->newEmptyEntity();
+
+        $entity->setCode($rp->getParameter(self::PARAM_CODE, true));
+        $entity->setName($rp->getParameter(self::PARAM_NAME, true));
+        $entity->setDeleted(0);
+        $entity->setVisible($rp->getParameter(self::PARAM_VISIBLE, true));
+        $entity->setCreate_user_id($rp->getParameter(self::PARAM_CREATE_USER_ID, true));
+        
+        return $model->create($entity);
+    }    
+    
+    /**
+     * Actualizar Entidad, si no existe retorna exception 
+     * @param type $request
+     * @return \Slim\Http\Response
+     */
+    public function update(RequestParameters $rp)
+    {   
+        $dsn        = $rp->getParameter('dsn');
+        $id         = $rp->getParameter('id');
+        $model      = $this->_modelInstance($dsn);
+        
+        $entity     = $this->_read($dsn, $id );
+
+        $entity->setCode($rp->getParameter(self::PARAM_CODE, true));
+        $entity->setName($rp->getParameter(self::PARAM_NAME, true));
+        $entity->setVisible($rp->getParameter(self::PARAM_VISIBLE, true));
+        $entity->setUpdate_user_id($rp->getParameter(self::PARAM_UPDATE_USER_ID, true));
+
+        return $model->update($entity);
+    }
+    
+    /**
+     * Find de registros en general 
+     * @param type $request
+     * @return \Slim\Http\Response
+     */
+    public function find(RequestParameters $rp)
+    {  
+        $dsn            = $rp->getParameter('dsn');
+        $page           = $rp->getParameter('page', FALSE, 1);
+        $rowsPerPage    = $rp->getParameter('rows_per_page', FALSE, 25);
+        $filters        = $rp->getParameter('filters', FALSE, []);  // filtros para la consulta (campo, operador, valor)
+        $showColumns    = $rp->getParameter('columns', FALSE, []); // columnas que se quieren mostrar
+        $sorts          = $rp->getParameter('sorts', FALSE, []); // columnas que se quieren ordenar 
+        
+        $model          = $this->_modelInstance($dsn);     
+
+        foreach ($filters as $filter) {
+             $model->where($model->newFilter($filter["field"],$filter["operation"], $filter["value"]));
+        }            
+
+        // columnas que se retornan en la consulta 
+        $model->select($showColumns);
+        
+         // uso de sorting 
+        foreach ($sorts as $sort) {
+           $model->sortBy($sort["field"], $sort["order"]);
+        }
+        
+        return $model->find($page, $rowsPerPage);
+    }
+    
+     /**
+     * delete permanente del registro 
+     * @param type $request
+     * @return array
+     */
+    public function softDelete(RequestParameters $rp)
+    {   
+        $dsn  = $rp->getParameter('dsn');
+        $entity_id = $rp->getParameter('id');
+        $delete_user_id = $rp->getParameter('delete_user_id');
+
+        $entity = $this->_read($dsn, $entity_id );
+        $entity->setDelete_user_id($delete_user_id);
+        
+        ## campo estandar para marca de registro elimnado. Puede variar segun el modelo 
+        $entity->setDeleted(1);
+        
+        return $this->_modelInstance($dsn)->update($entity);
+    }
+   
+     /** 
+     * Elimna el cache de todo el microservicio
+     */
+    public function cacheDeleteAll()
+    {
+        $this->_cacheInstance()->deleteByTag($this->_cacheKeyPrefix());
+        return true;
+    }
+    
+    /** 
+     * Elimna el cache de una instancia 
+     * @param type $request
+     * @param type $response
+     * @param type $args
+     * @return type
+     */
+    public function cacheDeleteByDsn(RequestParameters $rp)
+    {
+        $dsn  = $rp->getParameter('dsn');
+        $this->_modelInstance($dsn)->cacheDeleteByDsn();
+       
+        return true;
+    }
+    
+    /**
+     * Retorna entidad por ID
+     * @param string $dsn
+     * @param string $id
+     * @return \Pilot\MicroservicesLibs\Rdbms\Entity
+     */
+    private function _read(string $dsn, $id): \Pilot\MicroservicesLibs\Rdbms\Entity
+    {
+        return $this->_modelInstance($dsn)->readOrFail($id);
+    }
+    
+     /**
+     * Instancia del modelo 
+     * @param type $dsn
+     * @return \App\Models\MySqlModel
+     */
+    private function _modelInstance(string $dsn): \App\Models\{{ name }Model
+    {
+        $ConnectionManager = $this->getContainer()->sql->open($dsn);
+        $model = new \App\Models\{{ name }}Model($ConnectionManager);
+        // solo en el caso que la entidad maneje una capa de persistencia de cache 
+        $model->setCacheManager($this->_cacheInstance());
+        return $model;
+    }
+    
+    /**
+     * Instancia Cache Manager 
+     * @return \Pilot\CacheManager\Entities\Cache
+     */
+    private function _cacheInstance()
+    {
+        $cacheInstance = $this->getContainer()->cache;
+        
+        return $cacheInstance
+                ->setEnabled($this->getContainer()->var_env->get( $this->_cacheVarEnvName() ) == "yes")
+                ->setTtl(self::CONST_MAX_CACHE_DAYS) 
+                ->setCacheKeyPrefix($this->_cacheKeyPrefix()); 
+    }
+    
+    private function _cacheVarEnvName(): string
+    {
+        return strtoupper(sprintf('%s_CACHE_ENABLED', $this->_cacheKeyPrefix()));
+    }
+
+    
+    private function _cacheKeyPrefix(): string {
+        return $this->getContainer()->settings["app_name"];
+    }
+    
+}

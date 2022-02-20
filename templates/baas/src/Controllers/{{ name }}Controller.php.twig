@@ -1,0 +1,232 @@
+<?php
+namespace App\Controllers;
+
+/* Archivo generado automaticamente por Pilot ArtifactBuilder */ 
+
+use Pilot\MicroservicesLibs\Exceptions as PilotExceptions;
+use App\Services\{{ name }}Service;
+use Pilot\MicroservicesLibs\Exceptions\MsSqlException;
+
+class {{ name }}Controller extends \Pilot\MicroservicesLibs\Abstracts\GenericController
+{
+
+    /**
+     * Leer Entidad
+     * @param type $request
+     * @param type $response
+     * @param type $args
+     * @return \Slim\Http\Response
+     */
+     public function read($request, $response, $args)
+     {   
+        $rp = $this->container->request_parameters->from($request);
+        $so = $this->container->standard_output; 
+         
+        try {
+            $service = new {{ name }}Service($this->getContainer());
+
+            $entity = $service->read($rp);
+            
+            $result = $so->setOutput(TRUE, 'entity_read_ok', $entity->toArray());
+             
+        } catch (PilotExceptions\RecordNotFoundException $ex){
+            $result = $so->setOutput(FALSE, "entity_not_found", $rp->toArray());
+    
+        } catch (\Throwable $ex) {
+           $result = $so->setOutput(FALSE, $ex->getMessage(), $rp->toArray());
+        }
+         
+        return $result->getAsResponse($response);
+     }   
+    
+    /**
+     * Crear Entidad
+     * @param type $request
+     * @param type $response
+     * @param type $args
+     * @return \Slim\Http\Response
+     */
+    public function create($request, $response, $args)
+    {   
+        $rp = $this->container->request_parameters->from($request);
+        $so = $this->container->standard_output; 
+        try {
+            $service = new {{ name }}Service($this->getContainer());
+            $entity = $service->create($rp);
+            $result = $so->setOutput(TRUE, 'entity_created_ok', $entity->toArray());
+         } catch (MsSqlException $ex) {
+            $result = $so->setOutput(FALSE, $ex->getSubcode(), $rp->toArray());
+         } catch (\Throwable $ex) {
+            $result = $so->setOutput(FALSE, $ex->getMessage(), $rp->toArray());
+         }
+         
+         return $result->getAsResponse($response);      
+    }    
+    
+    /**
+     * Actualizar Entidad, si no existe retorna exception 
+     * @param type $request
+     * @param type $response
+     * @param type $args
+     * @return \Slim\Http\Response
+     */
+     public function update($request, $response, $args)
+     {   
+         
+        $rp = $this->container->request_parameters->from($request);
+        $so = $this->container->standard_output; 
+        
+        try {
+            $service = new {{ name }}Service($this->getContainer());
+
+            $entity = $service->update($rp);
+
+            $result = $so->setOutput(TRUE, 'entity_updated_ok', $entity->toArray());
+        
+        } catch (PilotExceptions\RecordNotFoundException $ex){
+            $result = $so->setOutput(FALSE, "entity_not_found", $rp->toArray());
+        } catch (\Throwable $ex) {
+           $result = $so->setOutput(FALSE, $ex->getMessage(), $rp->toArray());
+        }
+
+        return $result->getAsResponse($response);  
+     }
+        
+    /**
+     * Find de registros en general 
+     * @param type $request
+     * @param type $response
+     * @param type $args
+     * @return type
+     */
+    public function find($request, $response, $args)
+    {   
+        $rp = $this->container->request_parameters->from($request);
+        $so = $this->container->standard_output; 
+
+        try {
+            $service = new {{ name }}Service($this->getContainer());
+
+            $collection = $service->find($rp);
+
+            $result = $so->setOutput(TRUE, 'find_ok', $collection->toArray());  
+            
+        } catch (\Throwable $ex) {
+            $result = $so->setOutput(FALSE, $ex->getMessage(), $rp->toArray());
+        }
+
+        return $result->getAsResponse($response); 
+    }
+
+    public function search($request, $response, $args)
+    {   
+
+        $rp = $this->container->request_parameters->from($request);
+        $so = $this->container->standard_output; 
+
+        $dsn  = $rp->getParameter('dsn');
+        $page  = $rp->getParameter('page', FALSE, 1);
+        $rowsPerPage  = $rp->getParameter('rows_per_page', FALSE, 25);
+        $filters  = $rp->getParameter('filters', FALSE,[]);
+
+        $ConnectionManager = $this->container->sql->open($dsn);
+        ${{ name }}s = new \App\Models\{{ name }}Model($ConnectionManager);
+
+        // podemos agregar filtros
+        foreach ($filters as $filter) {
+            ${{ name }}s->where($filter["field"], $filter["operation"], $filter["value"]);
+        }
+
+        try{
+            $result = ${{ name }}s->find($page, $rowsPerPage)->toArray();
+        } catch (PilotExceptions\RecordNotFoundException $e){
+            throw new PilotExceptions\RecordNotFoundException("entity_not_found");
+        }
+        
+        return $so->setOutput(TRUE, 'search_ok', $result)->getAsResponse($response);      
+    }
+  
+      
+    
+     /**
+     * SoftDelete de una entidad (actualizar el campo deleted = 1) 
+     * @param type $request
+     * @param type $response
+     * @param type $args
+     * @return \Slim\Http\Response
+     */
+    
+    public function delete($request, $response, $args){   
+
+        $rp = $this->container->request_parameters->from($request);
+        $so = $this->container->standard_output; 
+        // var_dump($request);
+        // exit();
+        try {
+            $service = new {{ name }}Service($this->getContainer());
+            $entity = $service->softDelete($rp);
+            $result = $so->setOutput(TRUE, 'entity_deleted_ok', $entity->toArray());
+        
+        } catch (PilotExceptions\RecordNotFoundException $ex){
+            $result = $so->setOutput(FALSE, "entity_not_found", $rp->toArray());
+        } catch (\Throwable $ex) {
+           $result = $so->setOutput(FALSE, $ex->getMessage(), $rp->toArray());
+        }
+
+        return $result->getAsResponse($response);  
+    }    
+   
+     /** 
+     * Elimna el cache de todo el microservicio
+     * @param type $request
+     * @param type $response
+     * @param type $args
+     * @return type
+     */
+    public function cacheDeleteAll($request, $response, $args)
+    {
+        $so = $this->container->standard_output; 
+        
+        try {
+            $service = new {{ name }}Service($this->getContainer());
+
+            $service->cacheDeleteAll();
+
+            $result = $so->setOutput(TRUE, 'cache_deleted_all_ok');
+            
+        } catch (\Throwable $ex) {
+           $result = $so->setOutput(FALSE, $ex->getMessage());
+        }
+
+        return $result->getAsResponse($response);  
+        
+    }
+    
+    /** 
+     * Elimna el cache de todo el microservicio
+     * @param type $request
+     * @param type $response
+     * @param type $args
+     * @return type
+     */
+    public function cacheDeleteByDsn($request, $response, $args)
+    {
+        $rp = $this->container->request_parameters->from($request);
+        $so = $this->container->standard_output; 
+        
+        try {
+            $service = new {{ name }}Service($this->getContainer());
+
+            $service->cacheDeleteByDsn($rp);
+
+            $result = $so->setOutput(TRUE, 'cache_by_dsn_deleted_ok');
+            
+        } catch (\Throwable $ex) {
+           $result = $so->setOutput(FALSE, $ex->getMessage(), $rp->toArray());
+        }
+
+        return $result->getAsResponse($response);  
+    }
+  
+    
+}
