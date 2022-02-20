@@ -24,7 +24,7 @@
 const fs = require('fs')
 const codegen = require('./codegen-utils')
 
-const Twig = require('twig'), // Twig module
+const Twig = require('twig') // Twig module
    
 
 
