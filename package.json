@@ -4,7 +4,11 @@
   "description": "Generate PILOT code from ERD",
   "homepage": "https://github.com/niklauslee/staruml-ddl",
   "issues": "https://github.com/niklauslee/staruml-ddl/issues",
-  "keywords": ["ddl", "erd", "database"],
+  "keywords": [
+    "ddl",
+    "erd",
+    "database"
+  ],
   "version": "0.0.1",
   "author": {
     "name": "AMG",
@@ -14,5 +18,8 @@
   "license": "MIT",
   "engines": {
     "staruml": "^3.0.0"
+  },
+  "dependencies": {
+    "twig": "^1.15.4"
   }
 }

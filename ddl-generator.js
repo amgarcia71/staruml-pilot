@@ -24,6 +24,11 @@
 const fs = require('fs')
 const codegen = require('./codegen-utils')
 
+var Twig = require('twig'), // Twig module
+    twig = Twig.twig;       // Render function
+
+
+
 /**
  * DDL Generator
  */
@@ -276,6 +281,11 @@ class DDLGenerator {
           this.writeForeignKeys(codeWriter, e, options)
         }
       })
+
+
+      twig.renderFile('./templates/template1.twig', {baked_good:'mi texto'}, (err,  myCode) => {
+        codeWriter.writeLine(myCode)
+      });
 
       // Others (Nothing generated.)
       fs.writeFileSync(basePath, codeWriter.getData())
