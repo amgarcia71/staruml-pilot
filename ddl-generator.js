@@ -84,7 +84,7 @@ class DDLGenerator {
       // Tables
       elem.ownedElements.forEach(e => {
         if (e instanceof type.ERDEntity) {
-          this.writeTable(codeWriter, e, options)
+          this.writeCodeForTable( e, options)
         }
       })
 
