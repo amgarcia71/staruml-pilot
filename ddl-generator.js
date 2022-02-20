@@ -290,12 +290,13 @@ class DDLGenerator {
         data:  fs2.readFileSync( __dirname + '/templates/template1.twig').toString()
       });
 
-      console.log(template)
 
       console.log(
         template.render({baked_good: 'cupcake'})
       );
       // outputs: "The cupcake is a lie."
+
+      codeWriter.writeLine(JSON.stringify(elem, null, 2))
 
           
         codeWriter.writeLine( template.render({baked_good: 'cupcake'}))
