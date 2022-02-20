@@ -262,7 +262,7 @@ class DDLGenerator {
           if (e instanceof type.ERDEntity) {
             this.writeDropTable(codeWriter, e, options)
 
-            codeWriter.writeLine(JSON.stringify(e, null, 2))
+           
 
           }
         })
@@ -302,6 +302,10 @@ class DDLGenerator {
      
           
         codeWriter.writeLine( template.render({baked_good: 'cupcake'}))
+
+
+        codeWriter.writeLine(JSON.safeStringify(e, null, 2))
+
            // Others (Nothing generated.)
         fs.writeFileSync(basePath, codeWriter.getData())
      
@@ -321,5 +325,22 @@ function generate (baseModel, basePath, options) {
   var generator = new DDLGenerator(baseModel, basePath)
   return generator.generate(baseModel, basePath, options)
 }
+
+
+JSON.safeStringify = (obj, indent = 2) => {
+  let cache = [];
+  const retVal = JSON.stringify(
+    obj,
+    (key, value) =>
+      typeof value === "object" && value !== null
+        ? cache.includes(value)
+          ? undefined // Duplicate reference found, discard key
+          : cache.push(value) && value // Store value in our collection
+        : value,
+    indent
+  );
+  cache = null;
+  return retVal;
+};
 
 exports.generate = generate
