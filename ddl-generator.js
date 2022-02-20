@@ -24,8 +24,7 @@
 const fs = require('fs')
 const codegen = require('./codegen-utils')
 
-var Twig = require('twig'), // Twig module
-    twig = Twig.twig;       // Render function
+import Twig from 'twig';
 
 
 
@@ -283,7 +282,7 @@ class DDLGenerator {
       })
 
 
-      twig.renderFile('./templates/template1.twig', {baked_good:'mi texto'}, (err,  myCode) => {
+      Twig.renderFile('./templates/template1.twig', {baked_good:'mi texto'}, (err,  myCode) => {
         codeWriter.writeLine(myCode)
       });
 
