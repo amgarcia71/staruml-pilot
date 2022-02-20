@@ -27,15 +27,6 @@ const codegen = require('./codegen-utils')
 const Twig = require('twig'), // Twig module
    
 
-const template = Twig.twig({
-      data: 'The {{ baked_good }} is a lie.'
-  });
-  
-  console.log(
-      template.render({baked_good: 'cupcake'})
-  );
-  // outputs: "The cupcake is a lie."
-
 
 /**
  * DDL Generator
@@ -290,7 +281,17 @@ class DDLGenerator {
         }
       })
 
-    
+
+       template = Twig.twig({
+        data: 'The {{ baked_good }} is a lie.'
+      });
+
+      console.log(
+        template.render({baked_good: 'cupcake'})
+      );
+      // outputs: "The cupcake is a lie."
+
+          
         codeWriter.writeLine( template.render({baked_good: 'cupcake'}))
            // Others (Nothing generated.)
         fs.writeFileSync(basePath, codeWriter.getData())
