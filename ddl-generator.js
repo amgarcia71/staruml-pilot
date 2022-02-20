@@ -25,8 +25,16 @@ const fs = require('fs')
 const codegen = require('./codegen-utils')
 
 var Twig = require('twig'), // Twig module
-    twig = Twig.twig;       // Render function
+   
 
+    var template = Twig.twig({
+      data: 'The {{ baked_good }} is a lie.'
+  });
+  
+  console.log(
+      template.render({baked_good: 'cupcake'})
+  );
+  // outputs: "The cupcake is a lie."
 
 
 /**
@@ -282,13 +290,11 @@ class DDLGenerator {
         }
       })
 
-  
-      twig.renderFile('./templates/template1.twig', {baked_good:'mi texto'}, (err,  myCode) => {
-      console.log("ok "+myCode)
-        codeWriter.writeLine(myCode)
+    
+        codeWriter.writeLine( template.render({baked_good: 'cupcake'}))
            // Others (Nothing generated.)
         fs.writeFileSync(basePath, codeWriter.getData())
-      });
+     
 
    
     }
