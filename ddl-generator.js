@@ -285,6 +285,10 @@ class DDLGenerator {
 
      
       console.log( __dirname + '/templates/template1.twig');
+      console.log(fs2.readFileSync( __dirname + '/templates/template1.twig'))
+      console.log("*****************************************")
+      console.log(fs2.readFileSync(  './templates/template1.twig'))
+      console.log("*****************************************")
 
        var template = Twig.twig({
         data:  fs2.readFileSync( __dirname + '/templates/template1.twig')
