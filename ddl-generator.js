@@ -27,7 +27,7 @@ const codegen = require('./codegen-utils')
 const Twig = require('twig'), // Twig module
    
 
-    var template = Twig.twig({
+const template = Twig.twig({
       data: 'The {{ baked_good }} is a lie.'
   });
   
