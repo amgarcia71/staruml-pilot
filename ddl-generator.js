@@ -282,13 +282,15 @@ class DDLGenerator {
         }
       })
 
-
+  
       twig.renderFile('./templates/template1.twig', {baked_good:'mi texto'}, (err,  myCode) => {
+      console.log("ok "+myCode)
         codeWriter.writeLine(myCode)
+           // Others (Nothing generated.)
+        fs.writeFileSync(basePath, codeWriter.getData())
       });
 
-      // Others (Nothing generated.)
-      fs.writeFileSync(basePath, codeWriter.getData())
+   
     }
   }
 }
