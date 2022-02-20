@@ -56,13 +56,6 @@ class DDLGenerator {
           for (var i = 0; i < results.length; i++) {
               var t = results[i]
 
-              var getDirName = require('path').dirname;
-              fs.mkdir(getDirName(t), { recursive: true}, function (err) {
-                if (err) console.log(err)
-                 else  console.log( "dir created ", getDirName(t))
-       
-               })
-
               console.log(t)
               var template = Twig.twig({
                 data:  fs.readFileSync( t  ).toString()
@@ -70,6 +63,14 @@ class DDLGenerator {
 
               var mPath = path.join(  myPath,  relativePath(t,'/templates/').split('.')[0])
               console.log ('m path' , mPath)
+
+
+              var getDirName = require('path').dirname;
+              fs.mkdir(getDirName(mPath), { recursive: true}, function (err) {
+                if (err) console.log(err)
+                 else  console.log( "dir created ", getDirName(t))
+       
+               })
 
               fs.writeFileSync(   mPath   ,  template.render(elem), { recursive: true })
 
