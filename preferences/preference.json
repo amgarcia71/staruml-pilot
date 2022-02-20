@@ -3,7 +3,7 @@
   "name": "DDL",
   "schema": {
     "ddl.gen": {
-      "text": "DDL Generation",
+      "text": "PILOT code Generation",
       "type": "section"
     },
     "ddl.gen.fileExtension": {
