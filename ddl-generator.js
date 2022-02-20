@@ -61,7 +61,8 @@ class DDLGenerator {
                 data:  fs.readFileSync( t  ).toString()
               });
 
-              var mPath = path.join(  myPath,  relativePath(t,'/templates/').split('.')[0])
+              fRelative = relativePath(t,'/templates/')
+              var mPath = path.join(  myPath,  fRelative.split('.')[0]+'.'+fRelative.split('.')[1] )
               console.log ('m path' , mPath)
 
 
