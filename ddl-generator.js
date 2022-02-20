@@ -50,18 +50,19 @@ class DDLGenerator {
         console.log('templates', results);
 
         // Templates
-      results.forEach(t=> {
+      results.forEach(t ,basePath, elem   => {
 
           console.log(t)
           var template = Twig.twig({
-            data:  fs.readFileSync( t ).toString()
+            data:  fs.readFileSync( t  ).toString()
           });
 
           var myPath = path.join( this.basePath , elem.name ,  relativePath(t,'/templates/').split('.')[0] ) 
+          console.log (myPath)
 
           fs.writeFileSync( myPath,  template.render(elem), { recursive: true })
 
-      })
+      },  this.basePath , elem )
 
 
 
