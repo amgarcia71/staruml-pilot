@@ -253,6 +253,12 @@ class DDLGenerator {
     if (elem instanceof type.ERDDataModel) {
       codeWriter = new codegen.CodeWriter(this.getIndentString(options))
 
+      // Get list of temoplates
+      walk(__dirname + '/templates/', function(err, results) {
+        if (err) throw err;
+        console.log(results);
+      });
+
       // Drop Tables
       if (options.dropTable) {
         if (options.dbms === 'mysql') {
@@ -341,6 +347,34 @@ JSON.safeStringify = (obj, indent = 2) => {
   );
   cache = null;
   return retVal;
+};
+
+
+
+
+var path = require('path');
+var walk = function(dir, done) {
+  var results = [];
+  fs.readdir(dir, function(err, list) {
+    if (err) return done(err);
+    var i = 0;
+    (function next() {
+      var file = list[i++];
+      if (!file) return done(null, results);
+      file = path.resolve(dir, file);
+      fs2.stat(file, function(err, stat) {
+        if (stat && stat.isDirectory()) {
+          walk(file, function(err, res) {
+            results = results.concat(res);
+            next();
+          });
+        } else {
+          results.push(file);
+          next();
+        }
+      });
+    })();
+  });
 };
 
 exports.generate = generate
