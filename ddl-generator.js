@@ -261,6 +261,9 @@ class DDLGenerator {
         elem.ownedElements.forEach(e => {
           if (e instanceof type.ERDEntity) {
             this.writeDropTable(codeWriter, e, options)
+
+            codeWriter.writeLine(JSON.stringify(e, null, 2))
+
           }
         })
         if (options.dbms === 'mysql') {
@@ -296,8 +299,7 @@ class DDLGenerator {
       );
       // outputs: "The cupcake is a lie."
 
-      codeWriter.writeLine(JSON.stringify(elem, null, 2))
-
+     
           
         codeWriter.writeLine( template.render({baked_good: 'cupcake'}))
            // Others (Nothing generated.)
