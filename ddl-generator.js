@@ -22,6 +22,8 @@
  */
 
 const fs = require('fs')
+const fs2 = require('fs')
+
 const codegen = require('./codegen-utils')
 
 const Twig = require('twig') // Twig module
@@ -281,9 +283,10 @@ class DDLGenerator {
         }
       })
 
+     
 
        var template = Twig.twig({
-        data: 'The {{ baked_good }} is a lie.'
+        data:  fs2.readFileSync( __dirname + '/templates/template1.twig')
       });
 
       console.log(
