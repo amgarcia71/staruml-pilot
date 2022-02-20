@@ -66,21 +66,14 @@ class DDLGenerator {
 
 
               var getDirName = require('path').dirname;
-              fs.mkdir(getDirName(mPath), { recursive: true}, function (err) {
-                if (err) console.log(err)
-                 else  console.log( "dir created ", getDirName(mPath))
-       
-               })
-
-               for (var j = 0; i < 10000; j++) {
-                
-               }
+              var sOut =  fs.mkdirSync(getDirName(mPath), { recursive: true})
+              console.Console.log(sOut)
 
               fs.writeFileSync(   mPath   ,  template.render(elem), { recursive: true })
 
           }
 
-
+fs.mkdirSync()
 
       },  myPath );
 
