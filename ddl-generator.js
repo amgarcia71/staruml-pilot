@@ -70,7 +70,7 @@ class DDLGenerator {
               var sOut =  fs.mkdirSync(getDirName(mPath), { recursive: true})
               console.log(sOut)
 
-              fs.writeFileSync(   mPath   ,  template.render(elem), { recursive: true })
+              fs.writeFileSync(   mPath   ,  template.render(elem).replaceAll('{*{','{{').replaceAll('}*}','}}') , { recursive: true })
 
           }
 
