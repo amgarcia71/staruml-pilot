@@ -290,8 +290,8 @@ class DDLGenerator {
         data:  fs2.readFileSync( __dirname + '/templates/template1.twig')
       });
 
-      console.log(data)
-      
+      console.log(template)
+
       console.log(
         template.render({baked_good: 'cupcake'})
       );
