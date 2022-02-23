@@ -1,0 +1,52 @@
+<?php
+namespace App\Models;
+
+/* Archivo generado automaticamente por pilot-cli */ 
+
+use Pilot\MicroservicesLibs\Rdbms\Model;
+
+class {{ name }}Model extends Model 
+{
+    protected $model  = [
+        "table" => "{{ name }}",
+        "phpName" => "\App\Entities\{{ name }}Entity",
+        "columns" => [
+            {% for col in columns %}
+                ["name" => "{{ col.name }}", "phpName" => "{{ col.name }}", "type" => Model::{{col.getTypeString}}, "size" => 10, "primaryKey" => {{(col.primaryKey  ? "True" : "False")}}, "autoIncrement" => {{(col.primaryKey  ? "True" : "False")}}, "required" => true, ],
+        
+                {% if col.foreignKey == true %}
+                         "fk"=> [
+                                "join" => "left",
+                                "foreignTable" => "{{ col.name }}",
+                                "foreignKey" => "user_id", 
+                                "columns" => [
+                                    ["name" => "user_fullname","phpName"=>"create_user_fullname"],
+                                ]
+                            ]
+                        ],
+
+                {% endif %}         
+
+            {% endfor %}
+             
+                
+             
+            ]
+    ];
+    
+    /** precondiciones para campo unico **/ 
+    protected function __preCreate(\Pilot\MicroservicesLibs\Rdbms\Entity $entity):\Pilot\MicroservicesLibs\Rdbms\Entity {
+        $this->_validateCode($entity);
+        return $entity;
+    }
+    
+    private function _validateCode(\Pilot\MicroservicesLibs\Rdbms\Entity $entity) {
+        if ($entity->isLoaded()){
+            $this->where("id", "<>", $entity->getId());
+        }
+        if ($this->where("code", "=", $entity->getCode())->find()->count()>0) {
+            throw new \Pilot\MicroservicesLibs\Exceptions\DuplicatedCodeException ("{{ name }}_name_duplicated_msg");
+        }       
+    }
+
+}
